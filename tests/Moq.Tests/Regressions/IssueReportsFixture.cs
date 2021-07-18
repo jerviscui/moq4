@@ -122,7 +122,7 @@ namespace Moq.Tests.Regressions
 			testMock.Verify(x => x.M2());
 		}
 
-#endregion
+		#endregion
 
 		#region #78
 
@@ -1975,7 +1975,7 @@ namespace Moq.Tests.Regressions
 
 		#region 464
 
-		#if FEATURE_EF
+#if FEATURE_EF
 		public class Issue464
 		{
 			[Fact]
@@ -2003,7 +2003,7 @@ namespace Moq.Tests.Regressions
 
 			public class MyEntity { }
 		}
-		#endif
+#endif
 
 		#endregion
 
@@ -2095,7 +2095,7 @@ namespace Moq.Tests.Regressions
 
 		#region 526
 
-		#if FEATURE_EF
+#if FEATURE_EF
 		public sealed class Issue526
 		{
 			[Fact]
@@ -2121,7 +2121,7 @@ namespace Moq.Tests.Regressions
 				Assert.Equal("_", connection.ConnectionString);
 			}
 		}
-		#endif
+#endif
 
 		#endregion
 
@@ -2416,7 +2416,7 @@ namespace Moq.Tests.Regressions
 
 			public interface IFoo
 			{
-				int this[int index] { get;set; }
+				int this[int index] { get; set; }
 			}
 		}
 
@@ -2454,8 +2454,8 @@ namespace Moq.Tests.Regressions
 
 				var mock = new Mock<ISomeDependency>() { DefaultValue = defaultValue };
 				mock.Setup(x => x.DoMoreStuffAsync())
-				//  .Returns(Task.CompletedTask)
-				    .Callback(() => { });
+					//  .Returns(Task.CompletedTask)
+					.Callback(() => { });
 				await mock.Object.DoMoreStuffAsync();
 			}
 		}
@@ -2471,11 +2471,11 @@ namespace Moq.Tests.Regressions
 			{
 				Mock<Action> mock = new Mock<Action>();
 				Language.Flow.ISetup<Action> setup = mock.Setup(m => m());
-				
+
 				Exception ex = Assert.Throws<NotSupportedException>(() => setup.CallBase());
 				Assert.Equal(Resources.CallBaseCannotBeUsedWithDelegateMocks, ex.Message);
 			}
-			
+
 			[Fact]
 			public void CallBase_should_not_be_allowed_for_non_void_delegate_mocks()
 			{
@@ -2500,7 +2500,7 @@ namespace Moq.Tests.Regressions
 			{
 				Mock<Action> mock = new Mock<Action>();
 				mock.CallBase = false;
-				
+
 				Assert.False(mock.CallBase);
 			}
 		}
@@ -2519,7 +2519,7 @@ namespace Moq.Tests.Regressions
 				mock.Setup(m => m(x.Value));
 				mock.Object(1);
 				x = null; // if the argument expression `x.Value` got reevaluated by VerifyAll,
-				          // we'd expect to see a `NullReferenceException`.
+						  // we'd expect to see a `NullReferenceException`.
 				mock.VerifyAll();
 			}
 
@@ -2529,7 +2529,7 @@ namespace Moq.Tests.Regressions
 				int? x = 1;
 				var mock = new Mock<Action<int?>>();
 				mock.Setup(m => m(1));  // only difference to the above test, and one would
-				                        // think that this won't change anything.
+										// think that this won't change anything.
 				mock.Setup(m => m(x.Value));
 				mock.Object(1);
 				x = null;
@@ -2719,7 +2719,7 @@ namespace Moq.Tests.Regressions
 		{
 			public interface IX
 			{
-				string this[int index] { get;set; }
+				string this[int index] { get; set; }
 			}
 
 			[Fact]
@@ -3973,7 +3973,7 @@ namespace Moq.Tests.Regressions
 				var data = service.GetData();
 				var result = data.Sum();
 
-				Assert.Equal( 0, result );
+				Assert.Equal(0, result);
 			}
 
 			public interface IDataServiceFactory
@@ -5064,11 +5064,16 @@ namespace Moq.Tests.Regressions
 			public void Test()
 			{
 				var mock = new Mock<Foo>();
+				mock.SetupAllProperties();
 				mock.Protected().SetupSet<int>("Status", 42);
 
 				mock.Object.SetStatus(42);
+				mock.Object.SetStatus(1);
+
+				Assert.Equal(42, mock.Object.Status);
 
 				mock.Protected().VerifySet<int>("Status", Times.Once(), 42);
+				mock.Protected().VerifySet<int>("Status", Times.Exactly(2), ItExpr.IsAny<int>());
 			}
 
 			public class Foo

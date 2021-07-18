@@ -125,7 +125,9 @@ namespace Moq.Protected
 			ThrowIfPublicSetter(property, typeof(T).Name);
 			Guard.CanWrite(property);
 
-			var expression = GetSetterExpression(property, ItExpr.IsAny<TProperty>());
+			//var expression = GetSetterExpression(property, ItExpr.IsAny<TProperty>());
+			//var setup = Mock.Setup(mock, GetMethodCall(method, args), null);
+			var expression = GetSetterExpression(property, ToExpressionArg(property.SetMethod.GetParameters()[0], value));
 
 			var setup = Mock.SetupSet(mock, expression, condition: null);
 			return new SetterSetupPhrase<T, TProperty>(setup);
@@ -300,7 +302,7 @@ namespace Moq.Protected
 			ThrowIfPublicSetter(property, typeof(T).Name);
 			Guard.CanWrite(property);
 
-			var expression = GetSetterExpression(property, ItExpr.IsAny<TProperty>());
+			var expression = GetSetterExpression(property, ToExpressionArg(property.SetMethod.GetParameters()[0], value));
 			// TODO should consider property indexers
 			// TODO should receive the parameter here
 			Mock.VerifySet(mock, expression, times, null);
@@ -509,7 +511,7 @@ namespace Moq.Protected
 
 			return types;
 		}
-
+		
 		private static Expression ToExpressionArg(ParameterInfo paramInfo, object arg)
 		{
 			if (arg is LambdaExpression lambda)

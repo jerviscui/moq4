@@ -10,7 +10,7 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 #### Fixed
 
 * Issue mocking VB.NET class with overloaded property/indexer in base class (@myurashchyk, #1153)
-
+* `Protected().SetupSet()``Protected().VerifySet()` (#1184)
 
 ## 4.16.1 (2021-02-23)
 
