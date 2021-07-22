@@ -527,7 +527,7 @@ namespace Moq
 		{
 			Guard.NotNull(expression, nameof(expression));
 			Guard.IsAssignmentToPropertyOrIndexer(expression, nameof(expression));
-
+			
 			return Mock.Setup(mock, expression, condition);
 		}
 

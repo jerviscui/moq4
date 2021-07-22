@@ -808,7 +808,7 @@ namespace Moq.Tests
 			var mock = new Mock<FooBase>();
 			mock.Object.ProtectedInternalValue = "foo";
 
-			mock.Protected().VerifySet<string>("ProtectedInternalValue", Times.Once(), "bar");
+			mock.Protected().VerifySet<string>("ProtectedInternalValue", Times.Once(), "foo");
 		}
 
 		[Fact]
@@ -837,7 +837,7 @@ namespace Moq.Tests
 			mock.Object.SetProtectedValue("foo");
 			mock.Object.SetProtectedValue("foo");
 
-			mock.Protected().VerifySet<string>("ProtectedValue", Times.Exactly(2), ItExpr.IsAny<int>());
+			mock.Protected().VerifySet<string>("ProtectedValue", Times.Exactly(2), ItExpr.IsAny<string>());
 		}
 
 		public class MethodOverloads

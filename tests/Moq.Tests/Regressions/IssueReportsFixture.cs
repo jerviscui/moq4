@@ -5065,15 +5065,19 @@ namespace Moq.Tests.Regressions
 			{
 				var mock = new Mock<Foo>();
 				mock.SetupAllProperties();
-				mock.Protected().SetupSet<int>("Status", 42);
+				int value = 0;
+				mock.Protected().SetupSet<int>("Status", ItExpr.Is<int>(i => i > 1)).Callback(i => value = i);
 
 				mock.Object.SetStatus(42);
+				mock.Object.SetStatus(2);
 				mock.Object.SetStatus(1);
 
-				Assert.Equal(42, mock.Object.Status);
+				Assert.Equal(2, value);
+				Assert.Equal(1, mock.Object.Status);
 
 				mock.Protected().VerifySet<int>("Status", Times.Once(), 42);
-				mock.Protected().VerifySet<int>("Status", Times.Exactly(2), ItExpr.IsAny<int>());
+				mock.Protected().VerifySet<int>("Status", Times.Exactly(2), ItExpr.Is<int>(i => i > 1));
+				mock.Protected().VerifySet<int>("Status", Times.Exactly(3), ItExpr.IsAny<int>());
 			}
 
 			public class Foo

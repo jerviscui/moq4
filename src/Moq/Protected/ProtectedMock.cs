@@ -124,13 +124,11 @@ namespace Moq.Protected
 			ThrowIfMemberMissing(propertyName, property);
 			ThrowIfPublicSetter(property, typeof(T).Name);
 			Guard.CanWrite(property);
-
-			//var expression = GetSetterExpression(property, ItExpr.IsAny<TProperty>());
-			//var setup = Mock.Setup(mock, GetMethodCall(method, args), null);
+			
 			var expression = GetSetterExpression(property, ToExpressionArg(property.SetMethod.GetParameters()[0], value));
 
 			var setup = Mock.SetupSet(mock, expression, condition: null);
-			return new SetterSetupPhrase<T, TProperty>(setup);
+            return new SetterSetupPhrase<T, TProperty>(setup);
 		}
 
 		public ISetupSequentialAction SetupSequence(string methodOrPropertyName, params object[] args)
@@ -351,7 +349,7 @@ namespace Moq.Protected
 				propertyName,
 				BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 		}
-
+		
 		private static Expression<Action<T>> GetSetterExpression(PropertyInfo property, Expression value)
 		{
 			var param = Expression.Parameter(typeof(T), "mock");
